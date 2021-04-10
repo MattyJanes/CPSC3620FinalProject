@@ -109,35 +109,78 @@ void RedBlackTree::insertNode(int v) {
     n1->left_child = nullptr;
     n1->right_child = nullptr;
     n1->color = RED;
-    //cleanAfterInsert(n1);
+
+    if (n1->parent == nullptr) {
+        n1->color = BLACK;
+        return;
+    }
+    if (n1->parent->parent == nullptr) {
+        return;
+    }
+
+    cleanAfterInsert(n1);
 }
 
 void RedBlackTree::cleanAfterInsert(Node* n1) {
-    std::cout << "parents color: " << n1->parent->color << "\n";
+    //std::cout << "parents color: " << n1->parent->color << "\n";
+    Node* temp;
     while (n1->parent->color == RED) {
-        if (n1->parent->parent != nullptr) {
-            if (n1->parent == n1->parent->parent->left_child) {
-                Node* temp = n1->parent->parent->right_child;
-                if (temp->color == RED) {
-                    n1->parent->color = BLACK;
-                    temp->color = BLACK;
-                    n1->parent->parent->color = RED;
-                    n1 = n1->parent->parent;
-                } else {
-                    if (n1 == n1->parent->right_child) {
-                        n1 = n1->parent;
-                        leftRotate(n1);
-                    }
-                    n1->parent->color = BLACK;
-                    n1->parent->parent->color = RED;
-                    rightRotate(n1->parent->parent);
+        //std::cout << "a\n";
+        if (n1->parent == n1->parent->parent->left_child) {
+            //std::cout << "b\n";
+            temp = n1->parent->parent->right_child;
+            if (temp->color == RED) {
+                //std::cout << "c\n";
+                n1->parent->color = BLACK;
+                temp->color = BLACK;
+                n1->parent->parent->color = RED;
+                n1 = n1->parent->parent;
+            } else {
+                //std::cout << "d\n";
+                if (n1 == n1->parent->right_child) {
+                    n1 = n1->parent;
+                    leftRotate(n1);
                 }
+                n1->parent->color = BLACK;
+                n1->parent->parent->color = RED;
+                rightRotate(n1->parent->parent);
             }
+        } else if (n1->parent == n1->parent->parent->right_child) {
+            //std::cout << "e\n";
+            if (n1->parent->parent->left_child != nullptr)
+                temp = n1->parent->parent->left_child;
+            if (temp->color == 1) {
+                //std::cout << "f\n";
+                n1->parent->color = BLACK;
+                temp->color = BLACK;
+                n1->parent->parent->color = RED;
+                n1 = n1->parent->parent;
+            } else {
+                //std::cout << "g\n";
+                if (n1 == n1->parent->left_child) {
+                    n1 = n1->parent;
+                    rightRotate(n1);
+                }
+                n1->parent->color = BLACK;
+                n1->parent->parent->color = RED;
+                leftRotate(n1->parent->parent);
+            }
+        } else if (n1 == root) {
+            break;
         } else {
-            n1->parent->color == BLACK;
+           //  do nothing
         }
     }
     root->color = BLACK;
+    //std::cout << "done\n";
+}
+
+void RedBlackTree::deleteNode(Node* n1) {
+
+}
+
+void RedBlackTree::cleanAfterDelete(Node* n1) {
+
 }
 
 Node* RedBlackTree::getRoot() {
