@@ -14,60 +14,6 @@ RedBlackTree::~RedBlackTree() {
 }
 
 
-
-
-bool RedBlackTree::validTree() {
-    if (root->color == RED) {
-        return false;
-    }
-
-}
-
-//  A red node cannot have a red child
-//  Return false if red node
-//  Return true if black node
-//  Note that all null nodes are black
-bool RedBlackTree::checkRedsChildren(Node* n1) {
-    if (n1 == nullptr)
-        return true;
-    if (n1->left_child != nullptr) {
-        if (n1->left_child->color == RED) {
-            return false;
-        }
-    }
-    if (n1->right_child != nullptr) {
-        if (n1->right_child->color == RED) {
-            return false;
-        }
-    }
-
-    bool left = checkRedsChildren(n1->left_child);
-    bool right = checkRedsChildren(n1->right_child);
-    if (left && right)
-        return true;
-    else
-        return false;
-}
-
-//  All paths from a node to any null leaf descendant node must have the same number of
-//  black nodes
-int RedBlackTree::numBlackNodes(Node* n1) {
-    int sum;
-    if (n1 == nullptr)
-        return 1;
-    if (n1->left_child->color == BLACK) {
-        sum = 1 + numBlackNodes(n1->left_child);
-    }
-}
-
-bool RedBlackTree::validTreeHelperFunc(Node* n1) {
-    bool red_children_not_red;
-    bool same_num_black_nodes;
-
-}
-
-
-
 void RedBlackTree::print() {
     if (root == nullptr) {
         std::cout << "EMPTY\n";
@@ -163,7 +109,7 @@ void RedBlackTree::insertNode(int v) {
     n1->left_child = nullptr;
     n1->right_child = nullptr;
     n1->color = RED;
-    cleanAfterInsert(n1);
+    //cleanAfterInsert(n1);
 }
 
 void RedBlackTree::cleanAfterInsert(Node* n1) {
