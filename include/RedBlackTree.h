@@ -9,11 +9,6 @@ class RedBlackTree
     public:
         RedBlackTree();
         ~RedBlackTree();
-        bool validTree();
-        bool validTreeHelperFunc(Node* n1);
-        bool checkRedsChildren(Node* n1);
-        int numBlackNodes(Node* n1);
-
         void print();
         void leftRotate(Node* n1);
         void rightRotate(Node* n2);
