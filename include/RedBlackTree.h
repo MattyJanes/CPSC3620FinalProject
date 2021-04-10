@@ -17,6 +17,12 @@ class RedBlackTree
 
         void cleanAfterInsert(Node* n1);
 
+        void deleteNode(Node* n1);
+
+        void cleanAfterDelete(Node* n1);
+
+        void printNode(Node* n1);
+
         Node* getRoot();
     private:
         void printHelper(Node* n1);
