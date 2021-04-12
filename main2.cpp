@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <ctime>
+#include <cstdlib>
 #include <iomanip>
 
 enum COLOR  {RED = 0, BLACK =1};
@@ -47,48 +48,63 @@ class RedBlackTree
         bool case6(Node* n1, Node* sibling);
 
         void bstRemove(int value);
+        
+        int getSize() {return size;};
 
     private:
         void bstInsert(Node* n1);
         void printHelper(Node* n1, int spacer, int mode);
 
         Node* root;
+        int size;
 
         //  store nodes in vector since its easier to delete
         std::vector<Node*> node_storage;
 };
 
 int main() {
+    const int SIZE = 22000;
+    srand(time(NULL));
     RedBlackTree tree;
+    
+    std::vector<Node*> test1;
+    
+    int temp;
+    for (int i = 0; i < SIZE; i++) {
+        temp = rand() % 10000;
+        Node* n1 = new Node;
+        n1->value = temp;
+        test1.push_back(n1);
+    }
+    
     clock_t start = clock();
+    
+    for (int i = 0; i < test1.size(); i++) {
+        tree.insert(test1[i]);
+    }
+    
+    
+    std::cout << std::setprecision(5);
 
-    Node n1, n2, n3, n4, n5, n6, n7, n8;
-
-    n1.value = 20;
-    n2.value = 30;
-    n3.value = 15;
-    n4.value = 11;
-    n5.value = 5;
-    n6.value = 50;
-    n7.value = 34;
-    n8.value = 12;
-
-    tree.insert(&n1);
-    tree.insert(&n2);
-    tree.insert(&n3);
-    tree.insert(&n4);
-    tree.insert(&n5);
-    tree.insert(&n6);
-    tree.insert(&n7);
-    tree.insert(&n8);
-
-    tree.print();
-
-    tree.remove(n1.value);
-
-    tree.print();
-
-    std::cout << "Time taken: " << (double)(clock() - start)/ CLOCKS_PER_SEC << "\n";
+    std::cout << "Time taken to insert " << SIZE << " items : " 
+              << (double)(clock() - start)/ CLOCKS_PER_SEC 
+              << " seconds\n";
+              
+    start = clock();
+    
+    for (int i = 0; i < test1.size(); i++) {
+        tree.remove(test1[i]->value);
+    }
+    
+    std::cout << "Time taken to delete " << SIZE << " items: "
+              << (double)(clock() - start) / CLOCKS_PER_SEC
+              << " seconds\n";
+    
+    std::cout << "size of tree: " << tree.getSize() << "\n";
+    
+    //  Clean up
+    for (std::vector<Node*>::iterator i = test1.begin(); i != test1.end(); ++i)
+        delete *i;
 
     return 0;
 }
@@ -99,6 +115,7 @@ RedBlackTree::RedBlackTree() {
     root = nullptr;
     //root = new Node;
     //node_storage.push_back(root);
+    size = 0;
 }
 
 RedBlackTree::~RedBlackTree() {
@@ -225,7 +242,8 @@ void RedBlackTree::bstInsert(Node* n1) {
 }
 
 void RedBlackTree::insert(Node* n1) {
-    std::cout <<"insert\n";
+    size++;
+    //std::cout <<"insert\n";
     bstInsert(n1);
     n1->color = RED;
     balanceTree(n1);
@@ -255,16 +273,16 @@ Node* RedBlackTree::getUncle(Node* n1) {
 
 
 void RedBlackTree::balanceTree(Node* n1) {
-    std::cout << "start\n";
+    //  std::cout << "start\n";
     if (n1->parent == nullptr) {
         n1->color = BLACK;
         return;
     }
-    std::cout << "past first statement\n";
+    //  std::cout << "past first statement\n";
     if (n1->parent->color == BLACK) {
         //return;
     }
-    std::cout << "HERE\n";
+    //  std::cout << "HERE\n";
     Node* parent = n1->parent;
     Node* grandparent = getGrandparent(n1);
     Node* uncle = getUncle(n1);
@@ -294,8 +312,9 @@ void RedBlackTree::balanceTree(Node* n1) {
 }
 
 void RedBlackTree::remove(int v) {
+    size--;
     Node* n1 = nullptr;
-    std::cout << "a\n";
+    //  std::cout << "a\n";
     for (int i = 0; i < node_storage.size(); i++) {
         if (node_storage[i]->value == v) {
             n1 = node_storage[i];
@@ -320,7 +339,7 @@ void RedBlackTree::removeNode(Node* n1) {
     if (n1->color == BLACK) {
         preRemoval(n1);
     }
-    std::cout << "b\n";
+    //  std::cout << "b\n";
     bstRemove(n1->value);
 }
 
@@ -479,7 +498,7 @@ void RedBlackTree::bstRemove(int value) {
     }
     Node* parent = nullptr;
     Node* current = root;
-    std::cout << "c\n";
+    //  std::cout << "c\n";
     while (current != nullptr) {
         if (current->value == value) {
             if (current->left_child == nullptr && current->right_child == nullptr) {
@@ -510,9 +529,9 @@ void RedBlackTree::bstRemove(int value) {
                 Node* successor = current->right_child;
                 while (successor != nullptr) {
                     successor = successor->left_child;
-                    std::cout << "d\n";
+                    //  std::cout << "d\n";
                 }
-                bstRemove(successor->value);
+                //bstRemove(successor->value);
             }
             return;
         } else if (current->value < value) {
